@@ -6,8 +6,9 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const config = require('./config/database');
 
+
 // Connect to Database
-mongoose.connect(config.database);
+mongoose.connect(config.database, {useNewUrlParser: true});
 
 // On Connection
 mongoose.connection.on('connected', () => {
@@ -34,7 +35,14 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Body Parser Middleware
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+// Passport Middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+require('./config/passport')(passport);
 
 
 // Index Route
